@@ -1,0 +1,1048 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ROADRUNR Persona ROAS Model</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&display=swap" rel="stylesheet"/>
+<style>
+:root{color-scheme:dark}
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #080C12;
+  --bg1:      #0D1117;
+  --bg2:      #111820;
+  --bg3:      #141E28;
+  --panel:    #0F1923;
+  --border:   #1A2535;
+  --border2:  #243040;
+  --gold:     #B89A5A;
+  --gold2:    #D4B878;
+  --teal:     #00B4B4;
+  --teal2:    #00D4D4;
+  --orange:   #FF6B35;
+  --orange2:  #FF8C5A;
+  --purple:   #8B5CF6;
+  --green:    #22C97A;
+  --red:      #E05050;
+  --text:     #E8E8E0;
+  --muted:    #4A6070;
+  --muted2:   #6A8090;
+  --input-bg: #0A1520;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'DM Mono',monospace;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding:0;
+  line-height:1.5;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+  opacity:.6;
+}
+
+/* ── LAYOUT ── */
+.page{
+  position:relative;
+  z-index:1;
+  max-width:1140px;
+  margin:0 auto;
+  padding:52px 40px 80px;
+}
+
+/* ── MASTHEAD ── */
+.masthead{
+  border-bottom:1px solid var(--border);
+  padding-bottom:32px;
+  margin-bottom:48px;
+}
+
+.eyebrow{
+  font-size:10px;
+  letter-spacing:.24em;
+  color:var(--teal);
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+.doc-title{
+  font-family:'Fraunces',serif;
+  font-size:clamp(28px,4vw,44px);
+  font-weight:300;
+  color:var(--gold2);
+  line-height:1.15;
+  margin-bottom:10px;
+}
+
+.doc-subtitle{
+  font-size:11px;
+  color:var(--muted2);
+  letter-spacing:.04em;
+}
+
+.meta-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  margin-top:24px;
+}
+
+.meta-pill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:10px;
+  letter-spacing:.1em;
+  color:var(--muted2);
+}
+
+.meta-pill .dot{
+  width:6px;height:6px;border-radius:50%;
+}
+
+/* ── SECTION ── */
+.section{
+  margin-bottom:52px;
+  opacity:0;
+  transform:translateY(16px);
+  animation:fadeUp .5s ease forwards;
+}
+
+.section:nth-child(2){animation-delay:.05s}
+.section:nth-child(3){animation-delay:.10s}
+.section:nth-child(4){animation-delay:.15s}
+.section:nth-child(5){animation-delay:.20s}
+.section:nth-child(6){animation-delay:.25s}
+
+@keyframes fadeUp{
+  to{opacity:1;transform:translateY(0)}
+}
+
+.section-header{
+  display:flex;
+  align-items:baseline;
+  gap:14px;
+  margin-bottom:20px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+
+.section-tag{
+  font-size:9px;
+  letter-spacing:.2em;
+  color:var(--teal);
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.section-title{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:300;
+  color:var(--text);
+}
+
+.section-note{
+  font-size:10px;
+  color:var(--muted);
+  margin-left:auto;
+  white-space:nowrap;
+}
+
+/* ── INPUTS GRID ── */
+.inputs-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.input-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:16px 18px;
+  position:relative;
+  overflow:hidden;
+}
+
+.input-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+}
+
+.input-card.gold::before{background:var(--gold)}
+.input-card.teal::before{background:var(--teal)}
+.input-card.orange::before{background:var(--orange)}
+
+.input-label{
+  font-size:9px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--muted2);
+  margin-bottom:8px;
+  display:block;
+}
+
+.input-field{
+  font-family:'DM Mono',monospace;
+  font-size:22px;
+  font-weight:500;
+  color:var(--gold2);
+  background:transparent;
+  border:none;
+  outline:none;
+  width:100%;
+  padding:0;
+  letter-spacing:.02em;
+}
+
+.input-field:focus{color:var(--teal2)}
+
+.input-unit{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:4px;
+}
+
+/* ── SEGMENT SPLIT ── */
+.split-row{
+  display:grid;
+  grid-template-columns:180px 1fr 80px;
+  align-items:center;
+  gap:16px;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.split-label{
+  font-size:11px;
+  color:var(--muted2);
+}
+
+.split-label strong{
+  display:block;
+  font-size:12px;
+  color:var(--text);
+  margin-bottom:2px;
+}
+
+.split-slider{
+  -webkit-appearance:none;
+  appearance:none;
+  width:100%;
+  height:3px;
+  border-radius:2px;
+  background:var(--border2);
+  outline:none;
+  cursor:pointer;
+}
+
+.split-slider.sh::-webkit-slider-thumb{background:var(--orange)}
+.split-slider.qa::-webkit-slider-thumb{background:var(--teal)}
+.split-slider.wm::-webkit-slider-thumb{background:var(--purple)}
+
+.split-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:14px;height:14px;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:0 0 8px rgba(0,0,0,.5);
+}
+
+.split-pct{
+  font-size:14px;
+  font-weight:500;
+  text-align:right;
+}
+
+.split-pct.sh{color:var(--orange)}
+.split-pct.qa{color:var(--teal)}
+.split-pct.wm{color:var(--purple)}
+
+.split-check{
+  font-size:10px;
+  letter-spacing:.08em;
+  padding:6px 0;
+  color:var(--muted);
+}
+
+.split-check.ok{color:var(--green)}
+.split-check.err{color:var(--red)}
+
+/* ── RESULTS TABLE ── */
+.results-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:11px;
+}
+
+.results-table th{
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted2);
+  font-weight:400;
+  padding:10px 14px;
+  text-align:right;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+}
+
+.results-table th:first-child{text-align:left}
+
+.results-table td{
+  padding:11px 14px;
+  border-bottom:1px solid var(--border);
+  text-align:right;
+  font-size:12px;
+  color:var(--muted2);
+}
+
+.results-table td:first-child{
+  text-align:left;
+  color:var(--text);
+  font-size:11px;
+}
+
+.results-table tr.section-row td{
+  background:var(--panel);
+  font-size:9px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  padding:6px 14px;
+  color:var(--teal);
+  border-bottom:1px solid var(--border);
+}
+
+.results-table tr:hover td{background:var(--bg2)}
+
+.val-sh{color:var(--orange);font-weight:500}
+.val-qa{color:var(--teal);font-weight:500}
+.val-wm{color:var(--purple);font-weight:500}
+.val-port{color:var(--gold);font-weight:500}
+
+/* ── P(ROI>0) DISPLAY ── */
+.prob-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin:20px 0;
+}
+
+.prob-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:20px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.prob-card::after{
+  content:'';
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:3px;
+}
+
+.prob-card.sh::after{background:var(--orange)}
+.prob-card.qa::after{background:var(--teal)}
+.prob-card.wm::after{background:var(--purple)}
+.prob-card.port::after{background:var(--gold)}
+
+.prob-label{
+  font-size:9px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.prob-value{
+  font-family:'Fraunces',serif;
+  font-size:36px;
+  font-weight:300;
+  line-height:1;
+  margin-bottom:6px;
+}
+
+.prob-card.sh .prob-value{color:var(--orange)}
+.prob-card.qa .prob-value{color:var(--teal)}
+.prob-card.wm .prob-value{color:var(--purple)}
+.prob-card.port .prob-value{color:var(--gold)}
+
+.prob-sub{
+  font-size:10px;
+  color:var(--muted);
+}
+
+/* ── SCENARIO TABS ── */
+.scenario-tabs{
+  display:flex;
+  gap:0;
+  border-bottom:1px solid var(--border);
+  margin-bottom:0;
+  overflow-x:auto;
+}
+
+.scenario-tab{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:.08em;
+  color:var(--muted);
+  background:transparent;
+  border:none;
+  border-bottom:2px solid transparent;
+  padding:10px 18px;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:color .15s,border-color .15s;
+}
+
+.scenario-tab:hover{color:var(--text)}
+.scenario-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.scenario-tab.recommended{color:var(--green)}
+.scenario-tab.recommended.active{border-bottom-color:var(--green)}
+
+.scenario-panel{
+  display:none;
+  padding:20px 0;
+}
+
+.scenario-panel.active{display:block}
+
+.scenario-result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:16px;
+}
+
+.sc-stat{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:4px;
+  padding:16px;
+}
+
+.sc-stat-label{
+  font-size:9px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.sc-stat-value{
+  font-family:'Fraunces',serif;
+  font-size:24px;
+  font-weight:300;
+  color:var(--green);
+}
+
+.sc-stat-value.neutral{color:var(--gold)}
+.sc-stat-value.neg{color:var(--red)}
+
+.sc-verdict{
+  font-size:11px;
+  color:var(--muted2);
+  padding:12px 16px;
+  background:var(--bg2);
+  border-left:2px solid var(--border2);
+  border-radius:0 4px 4px 0;
+  line-height:1.6;
+}
+
+/* ── SENSITIVITY GRID ── */
+.sensitivity-wrap{overflow-x:auto;margin-top:16px}
+
+.sensitivity-grid{
+  border-collapse:collapse;
+  font-size:11px;
+  min-width:600px;
+}
+
+.sensitivity-grid th{
+  background:var(--panel);
+  color:var(--orange);
+  font-size:9px;
+  letter-spacing:.12em;
+  font-weight:500;
+  padding:8px 14px;
+  text-align:center;
+  border:1px solid var(--border);
+}
+
+.sensitivity-grid th.qa-head{color:var(--teal)}
+.sensitivity-grid th.corner{color:var(--muted);font-size:8px}
+
+.sensitivity-grid td{
+  padding:8px 14px;
+  text-align:center;
+  border:1px solid var(--border);
+  font-size:11px;
+  font-weight:500;
+  transition:filter .12s;
+}
+
+.sensitivity-grid td:hover{filter:brightness(1.4);cursor:default}
+
+.cell-pos-hi{background:#0A1F14;color:#22C97A}
+.cell-pos-md{background:#081810;color:#18A060}
+.cell-pos-lo{background:#060F09;color:#128040}
+.cell-neg{background:#180808;color:#E05050}
+.cell-na{background:var(--bg);color:var(--border2)}
+
+/* ── CHANGE LOG ── */
+.change-cards{display:flex;flex-direction:column;gap:12px}
+
+.change-card{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:0;
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.change-card-label{
+  padding:18px 20px;
+  background:var(--panel);
+  border-right:1px solid var(--border);
+}
+
+.change-card-tag{
+  font-size:8px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--teal);
+  margin-bottom:6px;
+}
+
+.change-card-title{
+  font-family:'Fraunces',serif;
+  font-size:15px;
+  font-weight:300;
+  line-height:1.3;
+}
+
+.change-card.orange .change-card-title{color:var(--orange)}
+.change-card.teal .change-card-title{color:var(--teal)}
+.change-card.green .change-card-title{color:var(--green)}
+.change-card.gold .change-card-title{color:var(--gold)}
+
+.change-card-body{
+  padding:18px 20px;
+  font-size:11px;
+  color:var(--muted2);
+  line-height:1.75;
+  background:var(--bg1);
+}
+
+.change-card-body strong{color:var(--text)}
+
+/* ── SEGMENT PROFILE CARDS ── */
+.seg-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.seg-card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.seg-card-head{
+  padding:16px 18px 14px;
+  border-bottom:1px solid var(--border);
+}
+
+.seg-card-name{
+  font-family:'Fraunces',serif;
+  font-size:17px;
+  font-weight:300;
+  margin-bottom:2px;
+}
+
+.seg-card.sh .seg-card-name{color:var(--orange)}
+.seg-card.qa .seg-card-name{color:var(--teal)}
+.seg-card.wm .seg-card-name{color:var(--purple)}
+
+.seg-card-cluster{
+  font-size:9px;
+  letter-spacing:.12em;
+  color:var(--muted);
+}
+
+.seg-stat-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:9px 18px;
+  border-bottom:1px solid var(--border);
+  font-size:11px;
+}
+
+.seg-stat-row:last-child{border-bottom:none}
+
+.seg-stat-key{color:var(--muted2)}
+
+.seg-stat-val{
+  font-weight:500;
+  font-size:12px;
+}
+
+.seg-card.sh .seg-stat-val{color:var(--orange)}
+.seg-card.qa .seg-stat-val{color:var(--teal)}
+.seg-card.wm .seg-stat-val{color:var(--purple)}
+
+.seg-stat-val.green{color:var(--green)!important}
+.seg-stat-val.red{color:var(--red)!important}
+
+/* ── FOOTER ── */
+.footnote{
+  margin-top:48px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  font-size:9px;
+  color:var(--muted);
+  line-height:1.8;
+  letter-spacing:.04em;
+}
+
+/* ── UTILS ── */
+.mono{font-family:'DM Mono',monospace}
+.fraunces{font-family:'Fraunces',serif}
+
+.divider{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+  margin:40px 0;
+}
+
+.tag{
+  display:inline-block;
+  font-size:8px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  padding:2px 7px;
+  border-radius:2px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+
+.tag-rec{background:#0A2015;color:var(--green);border:1px solid #1A4030}
+.tag-warn{background:#1A0C06;color:var(--orange);border:1px solid #3A2010}
+
+/* responsive */
+@media(max-width:800px){
+  .inputs-grid,.prob-grid,.seg-cards{grid-template-columns:1fr 1fr}
+  .scenario-result-grid{grid-template-columns:1fr}
+  .change-card{grid-template-columns:1fr}
+  .change-card-label{border-right:none;border-bottom:1px solid var(--border)}
+}
+@media(max-width:520px){
+  .page{padding:32px 20px 60px}
+  .prob-grid,.inputs-grid,.seg-cards{grid-template-columns:1fr}
+}
+
+/* ---- ROADRUNR additions ---- */
+:root{--c1:#FF6B35;--c2:#00B4B4;--c3:#8B5CF6;--c4:#B89A5A;--c5:#22C97A;--c6:#4C9AFF;--c7:#E0608A}
+.pc-1{color:var(--c1)}.pc-2{color:var(--c2)}.pc-3{color:var(--c3)}.pc-4{color:var(--c4)}.pc-5{color:var(--c5)}.pc-6{color:var(--c6)}.pc-7{color:var(--c7)}
+.sw-1{background:var(--c1)}.sw-2{background:var(--c2)}.sw-3{background:var(--c3)}.sw-4{background:var(--c4)}.sw-5{background:var(--c5)}.sw-6{background:var(--c6)}.sw-7{background:var(--c7)}
+.inputs-grid.four{grid-template-columns:repeat(4,1fr)}
+.cpi-toggle{display:flex;gap:6px;margin-top:8px}
+.cpi-toggle button{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--muted2);background:var(--bg2);border:1px solid var(--border2);padding:6px 10px;border-radius:3px;cursor:pointer}
+.cpi-toggle button.on{color:var(--bg);background:var(--teal);border-color:var(--teal)}
+.mini-input{font-family:'DM Mono',monospace;font-size:12px;color:var(--gold2);background:var(--input-bg);border:1px solid var(--border2);border-radius:3px;padding:4px 6px;width:78px;text-align:right}
+.ptable{width:100%;border-collapse:collapse;font-size:11px}
+.ptable th{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:400;padding:8px 8px;text-align:right;background:var(--panel);border-bottom:1px solid var(--border)}
+.ptable th:first-child,.ptable td:first-child{text-align:left}
+.ptable td{white-space:nowrap;padding:7px 8px;border-bottom:1px solid var(--border);text-align:right;color:var(--muted2)}
+.ptable td:first-child{color:var(--text)}
+.split-row{grid-template-columns:230px 1fr 150px}
+.split-slider::-webkit-slider-thumb{background:var(--gold)}
+.preset-row{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.preset-row button{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--text);background:var(--panel);border:1px solid var(--border2);padding:7px 12px;border-radius:3px;cursor:pointer}
+.preset-row button:hover{border-color:var(--teal);color:var(--teal2)}
+.prob-grid{grid-template-columns:repeat(4,1fr)}
+.badge{display:inline-block;font-size:8px;letter-spacing:.14em;text-transform:uppercase;padding:2px 6px;border-radius:2px;margin-left:6px;border:1px solid var(--border2);color:var(--muted2)}
+.badge.gated{color:var(--orange);border-color:#3A2010;background:#1A0C06}
+.badge.live{color:var(--green);border-color:#1A4030;background:#0A2015}
+.warn-box{font-size:11px;color:var(--muted2);padding:12px 16px;background:#1A0C06;border-left:2px solid var(--orange);border-radius:0 4px 4px 0;line-height:1.6;margin:14px 0}
+.seg-cards{grid-template-columns:repeat(3,1fr)}
+.seg-card .seg-card-name{font-size:15px}
+.nav-note{font-size:10px;color:#4A6070;letter-spacing:.08em}
+@media(max-width:800px){.inputs-grid.four,.prob-grid{grid-template-columns:1fr 1fr}.split-row{grid-template-columns:1fr}.ptable{display:block;overflow-x:auto}}
+@media(max-width:520px){.inputs-grid.four,.prob-grid{grid-template-columns:1fr}}
+</style>
+<style>
+.prog-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 32px;background:#080C12;border-bottom:1px solid #1A2535;font-family:'DM Mono',monospace;position:sticky;top:0;z-index:9999;gap:16px}
+.prog-nav a{text-decoration:none;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4A6070;transition:color .15s;white-space:nowrap;font-weight:600}
+.prog-nav a:hover{color:#E8E8E0}
+.prog-nav .home{color:#00B4B4;font-size:12px;font-weight:700;margin-right:8px}
+.prog-nav .links{display:flex;gap:24px;overflow-x:auto}
+@media(max-width:600px){.prog-nav .links{gap:14px}.prog-nav{padding:12px 16px}}
+</style>
+<nav class="prog-nav">
+  <a class="home" href="#top">ROADRUNR · Programmatica</a>
+  <div class="links">
+    <a href="#inputs">Inputs</a><a href="#alloc">Allocation</a><a href="#results">Results</a><a href="#scen">Scenarios</a><a href="#sens">Sensitivity</a><a href="#bid">Bid weights</a><a href="#profiles">Personas</a>
+  </div>
+</nav>
+<div class="page" id="top">
+<header class="masthead">
+  <div class="eyebrow">ROADRUNR · Driven by EROAD · Programmatic media planning · Oct 2026</div>
+  <h1 class="doc-title">Persona ROAS &amp; Bid-Weighting Model<br><span style="color:var(--teal);font-size:.65em;font-style:italic">Install cost, paying subscribers and return by persona</span></h1>
+  <p class="doc-subtitle">All dollars NZD unless marked USD &nbsp;·&nbsp; CPI range from the E-Road Plan deck benchmarks (USD 3 / 5.29 / 9) converted at <span id="fxtxt"></span> NZD per USD &nbsp;·&nbsp; Take rates from Pretian Squared pricing study &nbsp;·&nbsp; Persona parameters other than pool size are planning assumptions to be replaced by P2 test data</p>
+  <div class="meta-row" id="metapills"></div>
+</header>
+
+<div class="warn-box"><strong style="color:var(--orange)">How to read this.</strong> The model estimates what paid media can buy (installs), how many installs become paying subscribers, and what those subscribers return. At the NZ$3/month Base price, return per subscriber is small, so the model shows which personas clear a 3-year gross-margin payback at which CPI, and weights bids and budget accordingly. It is a planning model: confidence index values are illustrative, not statistical probabilities.</div>
+
+<!-- A -->
+<section class="section" id="inputs">
+  <div class="section-header"><span class="section-tag">A</span><h2 class="section-title">Funnel Inputs</h2><span class="section-note">Blue values = assumptions / adjust to model scenarios</span></div>
+  <div class="inputs-grid four">
+    <div class="input-card gold"><label class="input-label" for="i-budget">Programmatic net media (NZD)</label><input class="input-field" id="i-budget" type="number" step="5000"/><div class="input-unit">NZ$260,000 gross less 15% margin on net</div></div>
+    <div class="input-card teal"><label class="input-label">CPI scenario (benchmark-calibrated)</label><div class="cpi-toggle" id="cpitog"><button data-k="Low">LOW</button><button data-k="Base" class="on">BASE</button><button data-k="High">HIGH</button></div><div class="input-unit" id="cpitxt"></div></div>
+    <div class="input-card orange"><label class="input-label" for="i-real">Install-to-paid realisation</label><input class="input-field" id="i-real" type="number" step="5"/><div class="input-unit">% of stated take rate that pays within 90 days</div></div>
+    <div class="input-card gold"><label class="input-label" for="i-price">Subscription price (NZD / month)</label><input class="input-field" id="i-price" type="number" step="0.5"/><div class="input-unit">Pretian recommended Base: NZ$3</div></div>
+  </div>
+  <div class="inputs-grid four">
+    <div class="input-card teal"><label class="input-label" for="i-over">Overage per extra purchase (NZD)</label><input class="input-field" id="i-over" type="number" step="0.5"/><div class="input-unit">after 3 included per year; Pretian NZ$6-8</div></div>
+    <div class="input-card orange"><label class="input-label" for="i-gm">Gross margin on revenue</label><input class="input-field" id="i-gm" type="number" step="1"/><div class="input-unit">% (Pretian ~32% at NZ$3/month)</div></div>
+    <div class="input-card gold"><label class="input-label" for="i-ret">12-month retention</label><input class="input-field" id="i-ret" type="number" step="5"/><div class="input-unit">% (3-yr LTV = 1 + r + r²)</div></div>
+    <div class="input-card teal"><label class="input-label" for="i-awe">Awareness spend efficiency</label><input class="input-field" id="i-awe" type="number" step="5"/><div class="input-unit">% of performance-spend install efficiency</div></div>
+  </div>
+  <div class="inputs-grid four">
+    <div class="input-card orange"><label class="input-label" for="i-hur">ROAS hurdle (3-yr gross margin)</label><input class="input-field" id="i-hur" type="number" step="0.1"/><div class="input-unit">1.0 = pays back its media cost in 3 years</div></div>
+    <div class="input-card gold"><label class="input-label" for="i-cap">Max install penetration of pool</label><input class="input-field" id="i-cap" type="number" step="1"/><div class="input-unit">% saturation ceiling within the launch window</div></div>
+    <div class="input-card teal"><label class="input-label" for="i-fx">NZD per USD</label><input class="input-field" id="i-fx" type="number" step="0.01"/><div class="input-unit">mid-rate 15 Oct 2026</div></div>
+    <div class="input-card gold"><label class="input-label">Blended CPI at current mix (NZD)</label><div class="input-field" id="o-blend" style="font-size:22px">-</div><div class="input-unit">incl. awareness spend, before owned &amp; earned</div></div>
+  </div>
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:16px 20px;overflow-x:auto">
+    <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:12px">Persona parameters (edit to test)</div>
+    <table class="ptable" id="ptable"></table>
+  </div>
+</section>
+
+<!-- B -->
+<section class="section" id="alloc">
+  <div class="section-header"><span class="section-tag">B</span><h2 class="section-title">Budget Allocation by Persona</h2><span class="section-note">weights auto-normalise to 100%</span></div>
+  <div class="preset-row" id="presets"></div>
+  <div id="splits"></div>
+  <div class="split-check" id="splitcheck"></div>
+</section>
+
+<!-- C -->
+<section class="section" id="results">
+  <div class="section-header"><span class="section-tag">C</span><h2 class="section-title">ROI Results</h2><span class="section-note">live · paid-only per persona; portfolio line adds owned &amp; earned installs</span></div>
+  <div style="overflow-x:auto"><table class="results-table" id="rtable"></table></div>
+  <div class="prob-grid" id="probs"></div>
+  <div class="sc-verdict" id="verdict"></div>
+</section>
+
+<!-- E -->
+<section class="section" id="scen">
+  <div class="section-header"><span class="section-tag">D</span><h2 class="section-title">Scenario Comparison</h2><span class="section-note">same budget, different allocations</span></div>
+  <div class="scenario-tabs" id="stabs"></div>
+  <div id="spanels"></div>
+</section>
+
+<!-- F -->
+<section class="section" id="sens">
+  <div class="section-header"><span class="section-tag">E</span><h2 class="section-title">Sensitivity</h2><span class="section-note">portfolio 3-yr gross-margin ROAS at the allocation set in section B</span></div>
+  <div style="font-size:11px;color:var(--muted2);margin-bottom:8px">CPI (USD, deck benchmark scale) vs install-to-paid realisation. Green = clears the hurdle.</div>
+  <div class="sensitivity-wrap"><table class="sensitivity-grid" id="sens1"></table></div>
+  <div style="font-size:11px;color:var(--muted2);margin:22px 0 8px">Subscription price (NZD/month) vs CPI (USD). Price changes the revenue per subscriber and, via the Pretian curve, the take rate: at NZ$5/month stated take rates fall to 55% (diesel), 50% (EV) and 60% (PHEV).</div>
+  <div class="sensitivity-wrap"><table class="sensitivity-grid" id="sens2"></table></div>
+</section>
+
+<!-- G -->
+<section class="section" id="bid">
+  <div class="section-header"><span class="section-tag">F</span><h2 class="section-title">Bid Weighting and Platform Translation</h2><span class="section-note">Base-case allowable CPI sets the bid ceiling</span></div>
+  <div style="overflow-x:auto"><table class="results-table" id="btable"></table></div>
+  <div class="change-cards" style="margin-top:20px" id="bcards"></div>
+</section>
+
+<!-- H -->
+<section class="section" id="profiles">
+  <div class="section-header"><span class="section-tag">G</span><h2 class="section-title">Persona Profiles</h2><span class="section-note">Segment definitions from the ROADRUNR Launch Plan</span></div>
+  <div class="seg-cards" id="pcards"></div>
+</section>
+
+<div class="footnote">
+  Sources: ROADRUNR Launch Plan (11 Aug 2026); EROAD consumer research (Kantar Consumer Link, Oct 2025, n=1,024, directional opt-in sample, 22+); Pretian Squared pricing study (n=267: diesel 84, PHEV 68, EV 112); E-Road Plan deck CPI benchmark slide (USD); EHINZ vehicle fleet factsheet (2024) for EV/PHEV and light-commercial counts; FX from poundsterlinglive.com (USD/NZD mid 15 Oct 2026); Transport Minister comments reported by CarExpert NZ, 31 Aug 2026; Electoral Commission key dates for the 2026 general election (7 Nov 2026).<br>
+  Pool sizes: P1 derived from 775,441 light commercial vehicles x 80.8% diesel (excludes diesel passenger cars). P2/P3 derived from 113,715 light EVs split 70/30 BEV/PHEV. P4-P6 apply client-survey age shares (directional) to 65% of an approx. 4.3M light fleet. P7 is an assumption pending a DV360 reach forecast.<br>
+  Not yet measured on ROADRUNR: CPI by channel, install-to-paid conversion, retention, purchase frequency, owned and earned install share. Install-to-paid realisation of 40% is a planning assumption applied to the Pretian stated take rates. Business-case targets in the Launch Plan are still placeholders ([Xxx] downloads / [Xxx] RUC purchased).<br>
+  Confidence index = logistic(3 x (3-yr gross-margin ROAS - hurdle)), clipped 5%-95%. It is a directional index, not a statistical probability.
+</div>
+</div>
+
+<script>
+const D = {"fx": 1.785, "cpiUSD": {"Low": 3.0, "Base": 5.29, "High": 9.0}, "budget": 226087, "gross": 260000, "par": {"price": 3, "margin_gm": 0.32, "overage": 7.0, "incl_purchases": 3, "realisation": 0.4, "retention": 0.7, "aware_eff": 0.3, "hurdle": 1.0, "cap_pen": 0.12}, "personas": [{"id": "P1", "seg": "Seg 1", "name": "RUC-Experienced Switchers", "short": "Switchers", "gate": false, "pool": 626000, "poolsrc": "Derived: 775,441 light commercial x 80.8% diesel (EHINZ 2024); excludes diesel passenger cars", "take3": 0.65, "adj": 1.05, "purchases": 6, "costidx": 0.95, "owned": 0.3, "aware": 0.2967, "plan": 95139.0}, {"id": "P2", "seg": "Seg 2", "name": "EV Owners (battery electric)", "short": "EV Owners", "gate": false, "pool": 79600, "poolsrc": "Derived: 70% of 113,715 light EVs (EHINZ 2024)", "take3": 0.6, "adj": 1.0, "purchases": 3, "costidx": 1.2, "owned": 0.25, "aware": 0.2934, "plan": 35443.4}, {"id": "P3", "seg": "Seg 2", "name": "PHEV Drivers", "short": "PHEV", "gate": false, "pool": 34100, "poolsrc": "Derived: 113,715 light EVs less BEV estimate (EHINZ 2024)", "take3": 0.85, "adj": 1.0, "purchases": 3, "costidx": 1.35, "owned": 0.25, "aware": 0.2953, "plan": 26286.9}, {"id": "P4", "seg": "Seg 3", "name": "First-Time Petrol Payers 18-35", "short": "Petrol 18-35", "gate": true, "pool": 708000, "poolsrc": "65% of ~4.3M light fleet x 25.3% age share (client survey sample, directional)", "take3": 0.455, "adj": 1.0, "purchases": 3, "costidx": 1.0, "owned": 0.1, "aware": 0.3405, "plan": 16139.2}, {"id": "P5", "seg": "Seg 3", "name": "First-Time Petrol Payers 36-55", "short": "Petrol 36-55", "gate": true, "pool": 992000, "poolsrc": "65% of ~4.3M light fleet x 35.5% age share (client survey sample, directional)", "take3": 0.5525, "adj": 1.0, "purchases": 4, "costidx": 1.0, "owned": 0.1, "aware": 0.3418, "plan": 18574.0}, {"id": "P6", "seg": "Seg 3", "name": "First-Time Petrol Payers 56+", "short": "Petrol 56+", "gate": true, "pool": 1098000, "poolsrc": "65% of ~4.3M light fleet x 39.3% age share (client survey sample, directional)", "take3": 0.4875, "adj": 1.0, "purchases": 3, "costidx": 1.1, "owned": 0.1, "aware": 0.341, "plan": 12713.1}, {"id": "P7", "seg": "Seg 4", "name": "Family / Multi-Vehicle Households", "short": "Family", "gate": true, "pool": 400000, "poolsrc": "Assumption: parent households with 2+ vehicles, excluding P1-P3 signals; replace with DV360 forecast", "take3": 0.585, "adj": 1.0, "purchases": 5, "costidx": 1.05, "owned": 0.1, "aware": 0.325, "plan": 21791.4}]};
+const $ = id => document.getElementById(id);
+const fmt0 = n => Math.round(n).toLocaleString('en-NZ');
+const nzd0 = n => 'NZ$'+fmt0(n);
+const nzd2 = n => 'NZ$'+n.toFixed(2);
+let G = {fx:D.fx, price:D.par.price, over:D.par.overage, incl:D.par.incl_purchases, gm:D.par.margin_gm, real:D.par.realisation, ret:D.par.retention, awe:D.par.aware_eff, hur:D.par.hurdle, cap:D.par.cap_pen, budget:D.budget, cpiKey:'Base', cpiUSD:Object.assign({},D.cpiUSD)};
+let P = D.personas.map(p=>Object.assign({},p));
+let W = P.map(p=>p.plan);            // weights (raw)
+const TAKE_PRICE = {3:{diesel:.65,ev:.60,phev:.85},5:{diesel:.55,ev:.50,phev:.60}};
+
+function cpiNZD(g,key){ return g.cpiUSD[key||g.cpiKey]*g.fx; }
+function econ(p,g,aware,cpiBase){
+  const cpiPerf = cpiBase*p.costidx;
+  const eff = (1-aware)+aware*g.awe;
+  const cpiBlend = cpiPerf/eff;
+  const conv = Math.min(1,p.take3*p.adj*g.real);
+  const cpa = cpiBlend/conv;
+  const rev12 = g.price*12+Math.max(0,p.purchases-g.incl)*g.over;
+  const ltv3 = rev12*(1+g.ret+g.ret*g.ret);
+  return {cpiPerf,cpiBlend,conv,cpa,rev12,ltv3,roas12:rev12/cpa,roas3:ltv3/cpa,roas3gm:ltv3*g.gm/cpa,allow:conv*ltv3*g.gm/g.hur*eff,eff};
+}
+function calcAll(spends,g,awares,pers,cpiBase){
+  pers=pers||P; cpiBase=cpiBase==null?cpiNZD(g):cpiBase;
+  const rows=pers.map((p,i)=>{
+    const aw=awares?awares[i]:p.aware;
+    const sp=spends[i]; const e=econ(p,g,aw,cpiBase);
+    const cap=p.pool*g.cap; const lin=sp/e.cpiBlend;
+    const inst= sp>0? cap*(1-Math.exp(-lin/cap)) : 0;
+    const own=inst*p.owned/(1-p.owned);
+    const subs=(inst+own)*e.conv;
+    return Object.assign({p,sp,aw,cap,sat:lin/cap,inst,own,subs,rev12t:subs*e.rev12,ltv3t:subs*e.ltv3},e);
+  });
+  const sum=k=>rows.reduce((a,r)=>a+r[k],0);
+  const sp=sum('sp'),inst=sum('inst'),own=sum('own'),subs=sum('subs'),rev12=sum('rev12t'),ltv3=sum('ltv3t');
+  const tot={sp,inst,own,subs,rev12,ltv3,roas12:sp?rev12/sp:0,roas3:sp?ltv3/sp:0,roas3gm:sp?ltv3*g.gm/sp:0,cpaSub:subs?sp/subs:0,cpiAll:(inst+own)?sp/(inst+own):0,cpiPaid:inst?sp/inst:0};
+  return {rows,tot};
+}
+const conf = (r,hur)=>Math.max(.05,Math.min(.95,1/(1+Math.exp(-3*(r-hur)))));
+function spendsFromWeights(w,budget){const s=w.reduce((a,b)=>a+b,0)||1;return w.map(x=>budget*x/s);}
+
+/* ---- scenario definitions ---- */
+const ids=P.map(p=>p.id);
+function idxs(list){return P.map(p=>list.includes(p.id)?1:0);}
+function roasWeights(k,committedOnly,floor){
+  const base=calcAll(spendsFromWeights(W,G.budget),G).rows;
+  const w=base.map((r,i)=>(committedOnly&&P[i].gate)?0:Math.pow(r.roas3gm,k));
+  const s=w.reduce((a,b)=>a+b,0); let sh=w.map(x=>x/s);
+  if(floor){ sh=sh.map((x,i)=>(committedOnly&&P[i].gate)?0:Math.max(floor,x)); const t=sh.reduce((a,b)=>a+b,0); sh=sh.map(x=>x/t);}
+  return sh;
+}
+function scenarios(){
+  const poolEV=P.find(p=>p.id==='P2').pool, poolPH=P.find(p=>p.id==='P3').pool;
+  const evShare=poolEV/(poolEV+poolPH);
+  const ageShare={P4:.253,P5:.355,P6:.393};
+  return [
+   {key:'S1',name:'1 · Launch Plan as written',desc:'Segment budgets as in the Launch Plan: Seg 3 50%, Seg 4 20%, Seg 1 15%, Seg 2 15%. Assumes Universal RUC is live for the whole programme. Seg 3 split by client-survey age shares, Seg 2 by BEV/PHEV pool.',
+    w:[.15,.15*evShare,.15*(1-evShare),.5*ageShare.P4,.5*ageShare.P5,.5*ageShare.P6,.20]},
+   {key:'S2',name:'2 · Recommended: committed + gated tranche',rec:true,desc:'The Programmatica plan: committed Seg 1/2 spend, test cells in P2, flex pool and a gated tranche for Seg 3/4 that is released only when petrol RUC has a legislated start date.',
+    w:D.personas.map(p=>p.plan)},
+   {key:'S3',name:'3 · Committed personas only',desc:'Gated tranche not released (scenario C: no petrol-RUC date by 30 Jun 2027). All spend stays on Seg 1 and Seg 2 personas with a 15% floor each.',
+    w:null,fn:()=>roasWeights(.5,true,.15)},
+   {key:'S4',name:'4 · ROAS-proportional (committed)',desc:'Budget share proportional to 3-year gross-margin ROAS (k=1), committed personas only.',w:null,fn:()=>roasWeights(1,true,0)},
+   {key:'S5',name:'5 · ROAS-concentrated (committed)',desc:'Budget share proportional to ROAS squared (k=2). Highest efficiency, thinnest coverage of EV and PHEV owners.',w:null,fn:()=>roasWeights(2,true,0)},
+   {key:'S6',name:'6 · Equal weights, all personas',desc:'A naive control: every persona gets one seventh.',w:[1,1,1,1,1,1,1]},
+   {key:'S7',name:'7 · Election window (P0/P1 passive)',desc:'Seg 1 and 2 only, awareness-heavy (50% Aware stage), no Convert stage while the app is invite-only.',w:[.62,.22,.16,0,0,0,0],awareOverride:.5}
+  ];
+}
+let SC=[];
+
+/* ---- render ---- */
+function setInputs(){
+  $('i-budget').value=Math.round(G.budget); $('i-real').value=Math.round(G.real*100); $('i-price').value=G.price; $('i-over').value=G.over;
+  $('i-gm').value=Math.round(G.gm*100); $('i-ret').value=Math.round(G.ret*100); $('i-awe').value=Math.round(G.awe*100);
+  $('i-hur').value=G.hur; $('i-cap').value=Math.round(G.cap*100); $('i-fx').value=G.fx;
+  $('fxtxt').textContent=G.fx.toFixed(3);
+}
+function readInputs(){
+  G.budget=+$('i-budget').value||0; G.real=(+$('i-real').value||0)/100; G.price=+$('i-price').value||0; G.over=+$('i-over').value||0;
+  G.gm=(+$('i-gm').value||0)/100; G.ret=(+$('i-ret').value||0)/100; G.awe=(+$('i-awe').value||0)/100;
+  G.hur=+$('i-hur').value||1; G.cap=(+$('i-cap').value||0)/100; G.fx=+$('i-fx').value||D.fx;
+  $('fxtxt').textContent=G.fx.toFixed(3);
+}
+function renderPTable(){
+  let h='<tr><th>Persona</th><th>Status</th><th>Pool (vehicles)</th><th>Stated take rate @NZ$3</th><th>Persona adj</th><th>Purchases / yr</th><th>Cost index</th><th>Owned &amp; earned share</th><th>Aware share</th></tr>';
+  P.forEach((p,i)=>{
+    h+=`<tr><td class="pc-${i+1}">${p.id} · ${p.name}</td><td><span class="badge ${p.gate?'gated':'live'}">${p.gate?'gated':'committed'}</span></td>
+    <td><input class="mini-input" data-i="${i}" data-k="pool" value="${p.pool}"/></td>
+    <td><input class="mini-input" data-i="${i}" data-k="take3" value="${(p.take3*100).toFixed(1)}"/>%</td>
+    <td><input class="mini-input" data-i="${i}" data-k="adj" value="${p.adj}"/></td>
+    <td><input class="mini-input" data-i="${i}" data-k="purchases" value="${p.purchases}"/></td>
+    <td><input class="mini-input" data-i="${i}" data-k="costidx" value="${p.costidx}"/></td>
+    <td><input class="mini-input" data-i="${i}" data-k="owned" value="${(p.owned*100).toFixed(0)}"/>%</td>
+    <td><input class="mini-input" data-i="${i}" data-k="aware" value="${(p.aware*100).toFixed(0)}"/>%</td></tr>`;
+  });
+  $('ptable').innerHTML=h;
+  document.querySelectorAll('.mini-input').forEach(el=>el.addEventListener('input',()=>{
+    const i=+el.dataset.i,k=el.dataset.k; let v=parseFloat(el.value); if(isNaN(v))return;
+    if(['take3','owned','aware'].includes(k)) v=v/100;
+    P[i][k]=v; render();
+  }));
+}
+function renderSplits(){
+  const sp=spendsFromWeights(W,G.budget); const tot=W.reduce((a,b)=>a+b,0)||1;
+  let h='';
+  P.forEach((p,i)=>{
+    h+=`<div class="split-row"><div class="split-label"><strong class="pc-${i+1}">${p.id} · ${p.name}<span class="badge ${p.gate?'gated':'live'}">${p.gate?'gated':'committed'}</span></strong>${p.seg}</div>
+    <input class="split-slider" type="range" min="0" max="100" step="0.5" value="${(W[i]/tot*100).toFixed(1)}" data-i="${i}"/>
+    <div class="split-pct pc-${i+1}">${(W[i]/tot*100).toFixed(1)}% · ${nzd0(sp[i])}</div></div>`;
+  });
+  $('splits').innerHTML=h;
+  document.querySelectorAll('.split-slider').forEach(el=>el.addEventListener('input',()=>{
+    W[+el.dataset.i]=+el.value; render(true);
+  }));
+  const gated=P.reduce((a,p,i)=>a+(p.gate?W[i]:0),0)/tot;
+  $('splitcheck').className='split-check ok';
+  $('splitcheck').textContent=`Weights normalise to 100% · gated personas (Seg 3/4) hold ${(gated*100).toFixed(0)}% of spend. Gated spend only becomes live if petrol RUC has a legislated start date.`;
+}
+function renderPresets(){
+  const mk=(label,w)=>{const b=document.createElement('button');b.textContent=label;b.onclick=()=>{W=w.slice();render();};return b;};
+  const pr=$('presets'); pr.innerHTML='';
+  const S=scenarios();
+  pr.appendChild(mk('Recommended plan',S[1].w));
+  pr.appendChild(mk('Launch Plan as written',S[0].w));
+  pr.appendChild(mk('Committed only (15% floor)',roasWeights(.5,true,.15)));
+  pr.appendChild(mk('ROAS-proportional (committed)',roasWeights(1,true,0)));
+  pr.appendChild(mk('Equal weights',[1,1,1,1,1,1,1]));
+}
+function renderResults(){
+  const sp=spendsFromWeights(W,G.budget); const R=calcAll(sp,G);
+  const t=R.tot;
+  let h='<tr><th>Persona</th><th>Net media</th><th>Blended CPI</th><th>Paid installs</th><th>Owned &amp; earned</th><th>Install → paid</th><th>Cost / paying sub</th><th>Paying subs</th><th>Revenue 12m / sub</th><th>ROAS 12m</th><th>ROAS 3-yr GM (paid)</th></tr>';
+  R.rows.forEach((r,i)=>{
+    h+=`<tr><td class="pc-${i+1}">${r.p.id} · ${r.p.short}</td><td>${nzd0(r.sp)}</td><td>${nzd2(r.cpiBlend)}</td><td>${fmt0(r.inst)}</td><td>${fmt0(r.own)}</td><td>${(r.conv*100).toFixed(1)}%</td><td>${r.sp>0?nzd2(r.cpa):'-'}</td><td>${fmt0(r.subs)}</td><td>${nzd2(r.rev12)}</td><td>${r.sp>0?r.roas12.toFixed(2):'-'}</td><td class="${r.roas3gm>=G.hur?'val-port':''}">${r.sp>0?r.roas3gm.toFixed(2):'-'}</td></tr>`;
+  });
+  h+=`<tr class="section-row"><td colspan="11">Portfolio (incl. owned &amp; earned installs)</td></tr>
+  <tr><td>Total</td><td class="val-port">${nzd0(t.sp)}</td><td>${nzd2(t.cpiPaid)} paid / ${nzd2(t.cpiAll)} all</td><td class="val-port">${fmt0(t.inst)}</td><td>${fmt0(t.own)}</td><td></td><td>${nzd2(t.cpaSub)}</td><td class="val-port">${fmt0(t.subs)}</td><td>${nzd0(t.rev12)} total</td><td class="val-port">${t.roas12.toFixed(2)}</td><td class="val-port">${t.roas3gm.toFixed(2)}</td></tr>`;
+  $('rtable').innerHTML=h;
+  $('o-blend').textContent=nzd2(t.cpiPaid);
+  // confidence cards
+  const grp=(ids_)=>{const rs=R.rows.filter(r=>ids_.includes(r.p.id)&&r.sp>0);const s=rs.reduce((a,r)=>a+r.sp,0);const l=rs.reduce((a,r)=>a+r.ltv3t,0);const roas=s?l*G.gm/s:0;return {roas,s};};
+  const g1=grp(['P1']),g2=grp(['P2','P3']),g3=grp(['P4','P5','P6']),g4=grp(['P7']);
+  const card=(cls,label,g)=>`<div class="prob-card ${cls}"><div class="prob-label">${label}</div><div class="prob-value">${g.s?Math.round(conf(g.roas,G.hur)*100)+'%':'-'}</div><div class="prob-sub">${g.s?'3-yr GM ROAS '+g.roas.toFixed(2)+' (incl. owned & earned) vs hurdle '+G.hur.toFixed(1):'no spend'}</div></div>`;
+  $('probs').innerHTML=card('sh','Seg 1 · Switchers',g1)+card('qa','Seg 2 · EV & PHEV',g2)+card('wm','Seg 3 · Petrol payers',g3)+card('port','Portfolio (incl. owned)',{roas:t.roas3gm,s:t.sp});
+  const best=R.rows.filter(r=>r.sp>0).sort((a,b)=>b.roas3gm-a.roas3gm)[0], worst=R.rows.filter(r=>r.sp>0).sort((a,b)=>a.roas3gm-b.roas3gm)[0];
+  $('verdict').innerHTML=`<strong style="color:var(--text)">Reading the result.</strong> At a ${G.cpiKey} CPI (${nzd2(cpiNZD(G))} per install in performance channels) the portfolio returns ${t.roas3gm.toFixed(2)}x on 3-year gross margin vs a ${G.hur.toFixed(1)}x hurdle; ${t.roas3gm>=G.hur?'it clears the hurdle.':'it falls short of the hurdle, so either the cost per install must come down, owned and earned channels must carry more of the load, or the price/tier must rise.'} Strongest persona on paid media alone: <strong>${best.p.short}</strong> (${best.roas3gm.toFixed(2)}x). Weakest: <strong>${worst.p.short}</strong> (${worst.roas3gm.toFixed(2)}x), whose allowable CPI is ${nzd2(worst.allow)} against a plan CPI of ${nzd2(worst.cpiPerf)}.`;
+}
+function renderScenarios(){
+  SC=scenarios();
+  $('stabs').innerHTML=SC.map((s,i)=>`<button class="scenario-tab ${s.rec?'recommended':''} ${i===(window._sc||1)?'active':''}" data-i="${i}">${s.name}${s.rec?' ★':''}</button>`).join('');
+  $('spanels').innerHTML=SC.map((s,i)=>{
+    const w=s.fn?s.fn():s.w; const sp=spendsFromWeights(w,G.budget);
+    const aw=s.awareOverride?P.map(()=>s.awareOverride):null;
+    const R=calcAll(sp,G,aw); const t=R.tot;
+    const c=Math.round(conf(t.roas3gm,G.hur)*100);
+    const cls=t.roas3gm>=G.hur?'':(t.roas3gm>=G.hur*.75?'neutral':'neg');
+    const bar=R.rows.map((r,j)=>r.sp>0?`<span style="display:inline-block;height:8px;width:${(r.sp/t.sp*100).toFixed(1)}%;" class="sw-${j+1}" title="${r.p.short} ${(r.sp/t.sp*100).toFixed(0)}%"></span>`:'').join('');
+    return `<div class="scenario-panel ${i===(window._sc||1)?'active':''}" data-i="${i}">
+      <div style="font-size:11px;color:var(--muted2);margin-bottom:12px">${s.desc}</div>
+      <div style="display:flex;border-radius:2px;overflow:hidden;margin-bottom:16px">${bar}</div>
+      <div class="scenario-result-grid">
+        <div class="sc-stat"><div class="sc-stat-label">Paid installs</div><div class="sc-stat-value neutral">${fmt0(t.inst)}</div></div>
+        <div class="sc-stat"><div class="sc-stat-label">Paying subscribers (90 days, incl. owned)</div><div class="sc-stat-value neutral">${fmt0(t.subs)}</div></div>
+        <div class="sc-stat"><div class="sc-stat-label">Cost per paying subscriber</div><div class="sc-stat-value neutral">${nzd2(t.cpaSub)}</div></div>
+        <div class="sc-stat"><div class="sc-stat-label">ROAS 12m (revenue)</div><div class="sc-stat-value ${t.roas12>=1?'':'neg'}">${t.roas12.toFixed(2)}x</div></div>
+        <div class="sc-stat"><div class="sc-stat-label">ROAS 3-yr gross margin</div><div class="sc-stat-value ${cls}">${t.roas3gm.toFixed(2)}x</div></div>
+        <div class="sc-stat"><div class="sc-stat-label">Confidence index vs hurdle</div><div class="sc-stat-value ${cls}">${c}%</div></div>
+      </div>
+      <div class="sc-verdict">${R.rows.filter(r=>r.sp>0).map((r,j)=>`${r.p.short} ${(r.sp/t.sp*100).toFixed(0)}%`).join(' · ')}</div>
+    </div>`;}).join('');
+  document.querySelectorAll('.scenario-tab').forEach(b=>b.addEventListener('click',()=>{window._sc=+b.dataset.i;renderScenarios();}));
+}
+function portfolioROAS(g,cpiUSDkey){
+  const sp=spendsFromWeights(W,g.budget); return calcAll(sp,g,null,null,cpiUSDkey).tot.roas3gm;
+}
+function renderSens(){
+  const cpis=[3,4,5.29,7,9,12], reals=[.2,.3,.4,.5,.6];
+  let h='<tr><th class="corner">REALISATION ↓ / CPI (USD) →</th>'+cpis.map(c=>`<th>US$${c}<br><span style="color:var(--muted)">NZ$${(c*G.fx).toFixed(2)}</span></th>`).join('')+'</tr>';
+  reals.forEach(rl=>{
+    h+=`<tr><th class="qa-head">${Math.round(rl*100)}%</th>`;
+    cpis.forEach(c=>{
+      const g=Object.assign({},G,{real:rl}); const v=portfolioROAS(g,c*G.fx);
+      const cl=v>=G.hur*1.25?'cell-pos-hi':v>=G.hur?'cell-pos-md':v>=G.hur*.75?'cell-pos-lo':'cell-neg';
+      h+=`<td class="${cl}">${v.toFixed(2)}</td>`;});
+    h+='</tr>';});
+  $('sens1').innerHTML=h;
+  const prices=[3,4,5], cp=[3,5.29,9];
+  let h2='<tr><th class="corner">PRICE ↓ / CPI (USD) →</th>'+cp.map(c=>`<th>US$${c}</th>`).join('')+'</tr>';
+  prices.forEach(pr=>{
+    h2+=`<tr><th class="qa-head">NZ$${pr}/month</th>`;
+    cp.forEach(c=>{
+      // take-rate scaling from Pretian curve: NZ$3 -> NZ$5 stated take rates fall ~15% (diesel 65->55), 17% (EV), 29% (PHEV); linear in between, flat above 5 (Van Westendorp inflection)
+      const f = pr<=3?1: pr>=5? 0.80 : 1-(pr-3)/2*0.20;
+      const pers=P.map(p=>Object.assign({},p,{take3:p.take3*f}));
+      const g=Object.assign({},G,{price:pr});
+      const sp=spendsFromWeights(W,g.budget); const v=calcAll(sp,g,null,pers,c*g.fx).tot.roas3gm;
+      const cl=v>=G.hur*1.25?'cell-pos-hi':v>=G.hur?'cell-pos-md':v>=G.hur*.75?'cell-pos-lo':'cell-neg';
+      h2+=`<td class="${cl}">${v.toFixed(2)}</td>`;});
+    h2+='</tr>';});
+  $('sens2').innerHTML=h2;
+}
+function renderBid(){
+  const sp=spendsFromWeights(W,G.budget); const R=calcAll(sp,G);
+  const setAvg=(gate)=>{const rs=R.rows.filter(r=>r.p.gate===gate&&r.sp>0);const s=rs.reduce((a,r)=>a+r.sp,0);return s?rs.reduce((a,r)=>a+r.allow*r.sp,0)/s:1;};
+  const avgC=setAvg(false), avgG=setAvg(true);
+  let h='<tr><th>Persona</th><th>Set</th><th>Allowable CPI (cost cap)</th><th>Plan CPI</th><th>Plan vs allowable</th><th>Bid index</th><th>DV360 line item</th><th>Meta ad set</th><th>Google Ads</th></tr>';
+  R.rows.forEach((r,i)=>{
+    const avg=r.p.gate?avgG:avgC; const idx=Math.max(.5,Math.min(1.5,r.allow/avg));
+    const cap=r.allow;
+    h+=`<tr><td class="pc-${i+1}">${r.p.id} · ${r.p.short}</td><td>${r.p.gate?'Gated':'Committed'}</td><td class="val-port">${nzd2(cap)}</td><td>${nzd2(r.cpiPerf)}</td><td class="${r.cpiPerf/cap>1.5?'':'val-port'}" style="${r.cpiPerf/cap>1.5?'color:var(--red)':''}">${(r.cpiPerf/cap).toFixed(2)}x</td><td class="val-port">${idx.toFixed(2)}x</td>
+    <td>bid multiplier ${idx.toFixed(2)}x on persona audience</td><td>cost cap ${nzd2(cap)} / install</td><td>tCPA ${nzd2(r.allow/Math.max(.01,r.conv))} / paying sub ceiling</td></tr>`;
+  });
+  $('btable').innerHTML=h;
+  $('bcards').innerHTML=[
+   ['orange','Bid ceilings','Set each persona\'s cost cap at its allowable CPI. Where plan CPI is above the cap (EV owners, PHEV drivers, 18-35 and 56+ petrol payers at Base CPI), the cap forces delivery toward cheaper placements and cheaper creative formats, or the persona is served mostly by owned and earned channels.'],
+   ['teal','Budget weights','Budget share follows ROAS with strategic floors. Pure ROAS weighting would push most spend to Seg 1, so Seg 2 keeps a floor for advocacy, press and early-adopter proof. PHEV owners cannot be identified by powertrain in DV360 (proxy audiences only), which is reflected in a higher cost index.'],
+   ['gold','Re-weighting rule','After P2 (5 weeks), replace the cost index, install-to-paid realisation and purchase frequency with observed values, re-run, and move the flex pool toward the personas with the highest observed 3-year gross-margin ROAS, subject to the saturation ceiling.']
+  ].map(c=>`<div class="change-card ${c[0]}"><div class="change-card-label"><div class="change-card-tag">Rule</div><div class="change-card-title">${c[1]}</div></div><div class="change-card-body">${c[2]}</div></div>`).join('');
+}
+function renderProfiles(){
+  const sp=spendsFromWeights(W,G.budget); const R=calcAll(sp,G);
+  $('pcards').innerHTML=R.rows.map((r,i)=>`<div class="seg-card"><div class="seg-card-head"><div class="seg-card-name pc-${i+1}">${r.p.id} · ${r.p.name}</div><div class="seg-card-cluster">${r.p.seg.toUpperCase()} · ${r.p.gate?'GATED':'COMMITTED'}</div></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Pool (vehicles)</span><span class="seg-stat-val pc-${i+1}">${fmt0(r.p.pool)}</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Stated take rate @ NZ$3</span><span class="seg-stat-val pc-${i+1}">${(r.p.take3*100).toFixed(0)}%</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Install → paid (90 days)</span><span class="seg-stat-val pc-${i+1}">${(r.conv*100).toFixed(1)}%</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Revenue 12m per sub</span><span class="seg-stat-val pc-${i+1}">${nzd2(r.rev12)}</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Cost per paying sub</span><span class="seg-stat-val pc-${i+1}">${r.sp>0?nzd2(r.cpa):'-'}</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Allowable CPI</span><span class="seg-stat-val ${r.cpiPerf<=r.allow?'green':'red'}">${nzd2(r.allow)}</span></div>
+   <div class="seg-stat-row"><span class="seg-stat-key">Pool saturation at this spend</span><span class="seg-stat-val pc-${i+1}">${(r.sat*100).toFixed(0)}%</span></div></div>`).join('');
+}
+function render(skipSplits){
+  readInputs();
+  if(!skipSplits) renderSplits();
+  else { const sp=spendsFromWeights(W,G.budget); const tot=W.reduce((a,b)=>a+b,0)||1; document.querySelectorAll('.split-pct').forEach((el,i)=>{el.textContent=`${(W[i]/tot*100).toFixed(1)}% · ${nzd0(sp[i])}`;}); }
+  $('cpitxt').textContent=`US$${G.cpiUSD[G.cpiKey].toFixed(2)} = NZ$${cpiNZD(G).toFixed(2)} per install (performance channels)`;
+  renderResults(); renderScenarios(); renderSens(); renderBid(); renderProfiles();
+}
+function init(){
+  $('metapills').innerHTML=P.map((p,i)=>`<div class="meta-pill"><div class="dot sw-${i+1}"></div>${p.id} ${p.short} · ${p.gate?'gated':'committed'}</div>`).join('');
+  setInputs(); renderPTable(); renderPresets();
+  document.querySelectorAll('.input-field').forEach(el=>{ if(el.tagName==='INPUT') el.addEventListener('input',()=>render()); });
+  document.querySelectorAll('#cpitog button').forEach(b=>b.addEventListener('click',()=>{G.cpiKey=b.dataset.k;document.querySelectorAll('#cpitog button').forEach(x=>x.classList.toggle('on',x===b));render();}));
+  render();
+}
+init();
+</script>
+
+</body></html>
