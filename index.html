@@ -170,9 +170,9 @@ footer p{max-width:110ch;margin:0 0 8px}
   <div class="inputs">
     <div class="panel ctl">
       <label for="cpi">Cost per install <output id="cpiOut" for="cpi"></output></label>
-      <p class="help">Published app benchmarks run from US$3 to US$9 (NZ$5.36 to NZ$16.07). The base case is the US$5.29 average.</p>
-      <input id="cpi" type="range" min="5.355" max="16.065" step="any" value="9.44265">
-      <div class="ticks"><span>Low NZ$5.36</span><span>Average NZ$9.44</span><span>High NZ$16.07</span></div>
+      <p class="help">Published app benchmarks run from US$3 to US$9 (NZ$5.25 to NZ$15.75 at NZ$1.75 per US$). The base case is the US$5.29 average.</p>
+      <input id="cpi" type="range" min="5.25" max="15.75" step="any" value="9.2575">
+      <div class="ticks"><span>Low NZ$5.25</span><span>Average NZ$9.26</span><span>High NZ$15.75</span></div>
       <label for="fee" style="margin-top:26px">ROADRUNR fee <output id="feeOut" for="fee"></output></label>
       <p class="help">One percentage on every RUC purchase, the same for every driver, like a card fee. The base case is NZ$4 per 1,000 km at the standard NZ$76 rate.</p>
       <input id="fee" type="range" min="2" max="8" step="any" value="5.263158">
@@ -181,7 +181,7 @@ footer p{max-width:110ch;margin:0 0 8px}
     </div>
     <div class="panel ctl">
       <label>Kilometres a year, by audience</label>
-      <p class="help">Sets each audience’s revenue per subscriber: the fee times the RUC they buy in a year. The green band is the NZ$36 to NZ$60 a year people said they would pay.</p>
+      <p class="help">Sets each audience’s revenue per subscriber: the fee times the RUC they buy in a year. Defaults come from MoT and NZTA data (see sources). The green band is the NZ$36 to NZ$60 a year people said they would pay.</p>
       <div id="revs"></div>
     </div>
   </div>
@@ -227,29 +227,29 @@ footer p{max-width:110ch;margin:0 0 8px}
 
 <footer>
   <p><b>How the model works.</b> Spend buys installs at the cost per install, with diminishing returns as each audience’s pool fills. A share of installs become paying subscribers (stated willingness to pay, of which 40% is assumed to turn into payment). Subscribers stay at 70% a year (75% for PHEV), and revenue counts every year they keep buying RUC. Petrol owners are assumed to convert like diesel owners once RUC applies; 55% of their spend goes on RUC awareness and education first, which is why their return is lower. Take-up for the fee is taken from the NZ$3 a month results, because Pretian notes a small fee shown against a large purchase does not materially reduce conversion.</p>
-  <p><b>Sources.</b> EROAD UX study, Road User Charges (Oct 2025, n=1,024); Pretian Squared eRUC pricing study (May 2026, n=267); NZTA RUC rates of NZ$76 per 1,000 km for light diesel and EV, NZ$38 for plug-in hybrids, and the NZ$12.44 online admin fee, as listed by calculate.co.nz (May 2026). Kilometres and purchases a year are planning assumptions. Petrol has no RUC rate yet; NZ$76 is assumed. The fee is as discussed with EROAD and is still to be confirmed.</p>
+  <p><b>Sources.</b> EROAD UX study, Road User Charges (Oct 2025, n=1,024); Pretian Squared eRUC pricing study (May 2026, n=267); NZTA RUC rates of NZ$76 per 1,000 km for light diesel and EV, NZ$38 for plug-in hybrids, and the NZ$12.44 online admin fee, as listed by calculate.co.nz (May 2026). Kilometres a year: diesel 14,000, from MoT figures of about 800,000 light RUC vehicles paying about NZ$800M a year; EV and PHEV 12,000, from NZTA’s first year of EV RUC (NZ$79.4M excl. GST from 103,365 vehicles); petrol 9,500, below the MoT fleet average of about 10,600 because diesel travels further. Purchases a year: 4.6, the average for scheduled current payers in EROAD’s UX study. Fleet: MoT 2025 estimates (939K light diesel, 2.83M petrol, 429K petrol hybrids) and EVDB at 31 Aug 2026 (102,500 EVs, 52,500 PHEVs). Exchange rate NZ$1.75 per US$ (Oct 2026). Petrol has no RUC rate yet; NZ$76 is assumed. The fee is as discussed with EROAD and is still to be confirmed.</p>
   <p>Planning estimates, not forecasts. Testing from 9 November replaces the cost per install and payment assumptions with real data.</p>
 </footer>
 </div>
 
 <script>
 (function(){
-const FX=1.785, BUD=226087, REAL=0.40, AWE=0.30, CAP=0.12, NZTA_FEE=12.44, EROAD_TX_COST=6.51, OVERAGE=7;
+const FX=1.75, BUD=226087, REAL=0.40, AWE=0.30, CAP=0.12, NZTA_FEE=12.44, EROAD_TX_COST=6.51, OVERAGE=7;
 const P=[
- {id:'P1',g:'diesel',pool:626000,take:.65,take5:.55,adj:.90,ret:.70,cost:.95,own:.30,plan:95139,rec:60,up:.2967,ovr:1.6},
- {id:'P2',g:'ev',    pool:100000,take:.60,take5:.50,adj:1,  ret:.70,cost:1.2, own:.25,plan:35443,rec:25,up:.2934,ovr:1.2},
- {id:'P3',g:'phev',  pool:50000, take:.85,take5:.60,adj:1,  ret:.75,cost:1.35,own:.25,plan:26287,rec:15,up:.2953,ovr:.8},
- {id:'P4',g:'petrol',pool:708000,take:.65,take5:.55,adj:1,  ret:.70,cost:1.0, own:.10,plan:16139,rec:0, up:.55,  ovr:.8},
- {id:'P5',g:'petrol',pool:992000,take:.65,take5:.55,adj:1,  ret:.70,cost:1.0, own:.10,plan:18574,rec:0, up:.55,  ovr:.8},
- {id:'P6',g:'petrol',pool:1098000,take:.65,take5:.55,adj:1, ret:.70,cost:1.1, own:.10,plan:12713,rec:0, up:.55,  ovr:.6}
+ {id:'P1',g:'diesel',pool:939000,take:.65,take5:.55,adj:.90,ret:.70,cost:.95,own:.30,plan:95139,rec:60,up:.2967,ovr:1.6},
+ {id:'P2',g:'ev',    pool:102500,take:.60,take5:.50,adj:1,  ret:.70,cost:1.2, own:.25,plan:35443,rec:25,up:.2934,ovr:1.2},
+ {id:'P3',g:'phev',  pool:52500, take:.85,take5:.60,adj:1,  ret:.75,cost:1.35,own:.25,plan:26287,rec:15,up:.2953,ovr:.8},
+ {id:'P4',g:'petrol',pool:824650,take:.65,take5:.55,adj:1,  ret:.70,cost:1.0, own:.10,plan:16139,rec:0, up:.55,  ovr:.8},
+ {id:'P5',g:'petrol',pool:1155442,take:.65,take5:.55,adj:1,  ret:.70,cost:1.0, own:.10,plan:18574,rec:0, up:.55,  ovr:.8},
+ {id:'P6',g:'petrol',pool:1278907,take:.65,take5:.55,adj:1, ret:.70,cost:1.1, own:.10,plan:12713,rec:0, up:.55,  ovr:.6}
 ];
 const G={
- diesel:{name:'Diesel owners',sub:'626K vehicles, pay RUC now',col:'--teal',stages:2,budget:'60%',bsub:'of budget',rate:76,purch:4.6,min:5000,max:35000},
- ev:{name:'EV owners',sub:'About 100K, pay RUC now',col:'--green',stages:2,budget:'25%',bsub:'of budget',rate:76,purch:4.0,min:5000,max:25000},
- phev:{name:'PHEV owners',sub:'About 50K, pay RUC now',col:'--green',stages:2,budget:'15%',bsub:'of budget',rate:38,purch:3.5,min:5000,max:25000},
- petrol:{name:'Petrol owners',sub:'2.8M, no RUC start date',col:'--yellow',stages:4,budget:'0%',bsub:'until a start date',rate:76,purch:3.0,min:5000,max:25000}
+ diesel:{name:'Diesel owners',sub:'939K vehicles, pay RUC now',col:'--teal',stages:2,budget:'60%',bsub:'of budget',rate:76,purch:4.6,min:5000,max:35000},
+ ev:{name:'EV owners',sub:'102,500, pay RUC now',col:'--green',stages:2,budget:'25%',bsub:'of budget',rate:76,purch:4.6,min:5000,max:25000},
+ phev:{name:'PHEV owners',sub:'52,500, pay RUC now',col:'--green',stages:2,budget:'15%',bsub:'of budget',rate:38,purch:4.6,min:5000,max:25000},
+ petrol:{name:'Petrol owners',sub:'3.3M incl. hybrids, no RUC start date',col:'--yellow',stages:4,budget:'0%',bsub:'until a start date',rate:76,purch:4.6,min:5000,max:25000}
 };
-const DEF={cpi:5.29*1.785,fee:400/76,km:{diesel:15000,ev:11500,phev:11500,petrol:10000}};
+const DEF={cpi:5.29*1.75,fee:400/76,km:{diesel:14000,ev:12000,phev:12000,petrol:9500}};
 const S={cpi:DEF.cpi,fee:DEF.fee,km:Object.assign({},DEF.km)};
 const $=id=>document.getElementById(id);
 const nz=(v,d)=>'NZ$'+v.toLocaleString('en-NZ',{minimumFractionDigits:d,maximumFractionDigits:d});
@@ -355,7 +355,7 @@ function render(){
   if(alt){
     const a3=value(alt.r,3), as=alt.r.reduce((a,r)=>a+r.subs,0);
     $('alt').hidden=false;
-    $('altH').textContent='Alternative: a NZ$'+alt.price.toFixed(2)+' monthly subscription earns slightly more';
+    $('altH').textContent='Alternative: a NZ$'+alt.price.toFixed(2)+' monthly subscription earns more';
     $('altP').textContent='It returns '+nz(a3,2)+' per NZ$1 over three years against '+nz(y3,2)+' for the fee, and earns back the spend in '+fmtPb(payback(alt.r))+'. It wins about '+round100(subs-as).toLocaleString('en-NZ')+' fewer subscribers, because take-up falls as the monthly price rises above NZ$3. It includes 3 RUC purchases a year, with NZ$7 for each extra one.';
   } else $('alt').hidden=true;
   // reality check
@@ -363,7 +363,7 @@ function render(){
     const g=G[k], r=S.km[k]/1000*g.rate;
     return `<tr><td>${g.name}</td><td>${S.km[k].toLocaleString('en-NZ')}</td><td>${nz(g.rate,0)}${k==='petrol'?' (assumed)':''}</td><td>${nz(r,0)}</td><td>${nz(g.purch*NZTA_FEE,0)}${k==='petrol'?' (future)':''}</td><td>${nz(S.fee/100*g.rate,2)}</td><td class="pct">${nz(feeRev(k),0)}</td></tr>`;
   }).join('');
-  $('v1').textContent='Buying online from NZTA costs NZ$12.44 a purchase. A diesel driver buying 4 to 5 times a year pays about NZ$57 in admin fees; the ROADRUNR fee would be '+nz(feeRev('diesel'),0)+'.';
+  $('v1').textContent='Buying online from NZTA costs NZ$12.44 a purchase. Current payers on a schedule buy about 4.6 times a year, about NZ$57 in admin fees; the ROADRUNR fee on a diesel driver would be '+nz(feeRev('diesel'),0)+'.';
   const be=EROAD_TX_COST/(S.fee/100*76)*1000, beP=EROAD_TX_COST/(S.fee/100*38)*1000;
   $('v3').textContent='Pretian’s figures imply EROAD pays about NZ$6.51 a transaction. The fee only covers that on purchases of about '+Math.round(be/100)*100+' km or more ('+Math.round(beP/100)*100+' km for PHEV), so a minimum charge or block size is needed.';
 }
